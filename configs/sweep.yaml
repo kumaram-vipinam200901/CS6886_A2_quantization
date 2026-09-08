@@ -1,0 +1,27 @@
+# The compression sweep is driven by sweep.py (it loops over a fixed list of
+# configurations and logs each as one wandb run). This file just documents the
+# configurations that get run so they are visible without reading the code.
+#
+#   python sweep.py --checkpoint checkpoints/mobilenetv2_cifar10.pth
+#
+# Then build a Parallel Coordinates panel in wandb over:
+#   avg_weight_bits, a_bits, method, model_compression_ratio, quant_acc
+
+runs:
+  # uniform-precision PTQ (activations at 8 bits)
+  - {method: ptq, mixed: false, w_bits: 8, a_bits: 8}
+  - {method: ptq, mixed: false, w_bits: 6, a_bits: 8}
+  - {method: ptq, mixed: false, w_bits: 4, a_bits: 8}
+  - {method: ptq, mixed: false, w_bits: 3, a_bits: 8}
+  - {method: ptq, mixed: false, w_bits: 2, a_bits: 8}
+  # uniform-precision QAT (activations at 6 bits)
+  - {method: qat, mixed: false, w_bits: 4, a_bits: 6}
+  - {method: qat, mixed: false, w_bits: 3, a_bits: 6}
+  - {method: qat, mixed: false, w_bits: 2, a_bits: 6}
+  # mixed-precision at target average bit-widths
+  - {method: ptq, mixed: true, target_avg_bits: 4, a_bits: 8}
+  - {method: qat, mixed: true, target_avg_bits: 4, a_bits: 6}
+  - {method: ptq, mixed: true, target_avg_bits: 3, a_bits: 8}
+  - {method: qat, mixed: true, target_avg_bits: 3, a_bits: 6}
+  - {method: ptq, mixed: true, target_avg_bits: 2, a_bits: 8}
+  - {method: qat, mixed: true, target_avg_bits: 2, a_bits: 6}

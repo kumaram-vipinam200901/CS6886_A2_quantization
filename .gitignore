@@ -1,0 +1,11 @@
+.venv/
+data/
+checkpoints/*.pth
+checkpoints/*.bin
+wandb/
+__pycache__/
+*.pyc
+*_log.txt
+curves/
+curves_pretrained/
+report/*.pdf
